@@ -87,7 +87,7 @@ def store_rpm_deps(db, package, nogpgcheck=False) -> bool:
     files = header.fiFromHeader()
     log.debug("%s contains %d files", package.nvra(), len(files))
 
-    db.session.begin_nested()
+    db.session.begin()
 
     # Invalid name for type variable
     # pylint: disable-msg=C0103
@@ -152,7 +152,7 @@ def store_rpm_deps(db, package, nogpgcheck=False) -> bool:
     # pylint: enable-msg=C0103
 
     rpm_file.close()
-    db.session.flush()
+    db.session.commit()
 
 
 def unpack_rpm_to_tmp(path, prefix="faf") -> str:
